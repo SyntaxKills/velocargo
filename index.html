@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="VeloCargo — painel de logística e distribuição.">
+  <title>VeloCargo | Gestão logística</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="VeloCargo início">
+        <span class="brand-mark">VC</span>
+        <span><strong>VeloCargo</strong><small>LOGÍSTICA & DISTRIBUIÇÃO</small></span>
+      </a>
+      <div class="side-label">MENU PRINCIPAL</div>
+      <nav class="navigation" aria-label="Navegação principal">
+        <button class="nav-link active" data-page="dashboard"><span>▦</span> Visão geral</button>
+        <button class="nav-link" data-page="fleet"><span>▣</span> Frota</button>
+        <button class="nav-link" data-page="orders"><span>▤</span> Pedidos</button>
+        <button class="nav-link" data-page="tracking"><span>⌕</span> Rastreamento</button>
+        <button class="nav-link" data-page="reports"><span>▥</span> Relatórios</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div>
+        <div><strong>Sistema operacional</strong><small>Dados salvos neste navegador</small></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menu">☰</button>
+        <div><span class="eyebrow">PAINEL DE CONTROLE</span><h1 id="pageTitle">Visão geral</h1></div>
+        <div class="topbar-actions">
+          <span class="today" id="today"></span>
+          <button class="button button-primary" id="newOrderTop">＋ Novo pedido</button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-dashboard">
+        <div class="welcome-row">
+          <div><h2>Resumo da operação</h2><p>Acompanhe os indicadores e a movimentação da sua frota.</p></div>
+          <span class="live-pill"><i></i> Atualizado em tempo real</span>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Pedidos registrados</span><span class="stat-icon blue">▤</span></div><strong id="statOrders">0</strong><small>Total de pedidos na operação</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Veículos disponíveis</span><span class="stat-icon green">▣</span></div><strong id="statAvailable">0</strong><small id="statFleetCaption">Da frota cadastrada</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Em trânsito</span><span class="stat-icon orange">↗</span></div><strong id="statTransit">0</strong><small>Entregas em andamento</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Valor total dos fretes</span><span class="stat-icon purple">R$</span></div><strong id="statRevenue">R$ 0,00</strong><small>Fretes calculados, sem seguro</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Pedidos recentes</h3><p>Últimas movimentações registradas</p></div><button class="text-button" data-go="orders">Ver todos →</button></div>
+            <div class="table-wrap"><table><thead><tr><th>CÓDIGO</th><th>CLIENTE</th><th>DESTINO</th><th>STATUS</th><th>TOTAL</th></tr></thead><tbody id="recentOrders"></tbody></table></div>
+          </article>
+          <article class="panel fleet-summary">
+            <div class="panel-heading"><div><h3>Disponibilidade da frota</h3><p>Situação dos veículos</p></div></div>
+            <div class="fleet-meter"><div class="meter-ring" id="fleetRing"><strong id="fleetPercent">0%</strong></div><div><strong id="fleetAvailableText">0 de 0</strong><small>veículos disponíveis</small></div></div>
+            <div class="legend"><span><i class="legend-green"></i> Disponível</span><span><i class="legend-gray"></i> Em rota</span></div>
+            <button class="button button-light full" data-go="fleet">Gerenciar frota</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="page-fleet">
+        <div class="section-intro"><div><h2>Frota de veículos</h2><p>Consulte a capacidade e a disponibilidade dos veículos.</p></div></div>
+        <div class="fleet-cards" id="fleetCards"></div>
+      </section>
+
+      <section class="page" id="page-orders">
+        <div class="section-intro"><div><h2>Gestão de pedidos</h2><p>Consulte, crie e acompanhe os pedidos de transporte.</p></div><button class="button button-primary" id="newOrder">＋ Criar pedido</button></div>
+        <div class="panel">
+          <div class="toolbar"><input id="orderSearch" class="search-input" type="search" placeholder="Buscar por código, cliente ou destino..."><select id="statusFilter" class="select-input"><option value="">Todos os status</option><option>Em Trânsito</option><option>Aguardando Coleta</option><option>Entregue</option><option>Ocorrência</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>CÓDIGO</th><th>CLIENTE</th><th>DESTINO</th><th>DISTÂNCIA</th><th>STATUS</th><th>TOTAL</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-tracking">
+        <div class="section-intro"><div><h2>Rastreamento de pedidos</h2><p>Informe o código para consultar os detalhes e o histórico.</p></div></div>
+        <div class="tracking-search panel"><label for="trackingCode">Código de rastreio</label><div class="tracking-input-row"><input id="trackingCode" class="search-input" placeholder="Ex.: VC-1001"><button class="button button-primary" id="trackButton">Rastrear pedido</button></div></div>
+        <div id="trackingResult"></div>
+      </section>
+
+      <section class="page" id="page-reports">
+        <div class="section-intro"><div><h2>Relatório financeiro</h2><p>Indicadores calculados com base nos pedidos cadastrados.</p></div><button class="button button-light" id="resetData">Restaurar dados de exemplo</button></div>
+        <div class="stats-grid report-stats">
+          <article class="stat-card"><span class="muted">Faturamento de fretes</span><strong id="reportFreight">R$ 0,00</strong></article>
+          <article class="stat-card"><span class="muted">Total de seguros</span><strong id="reportInsurance">R$ 0,00</strong></article>
+          <article class="stat-card"><span class="muted">Peso movimentado</span><strong id="reportWeight">0 kg</strong></article>
+          <article class="stat-card"><span class="muted">Maior pedido</span><strong class="small-stat" id="reportLargest">—</strong></article>
+        </div>
+        <article class="panel"><div class="panel-heading"><div><h3>Resumo por pedido</h3><p>Frete, seguro e valor total</p></div></div><div class="table-wrap"><table><thead><tr><th>PEDIDO</th><th>FRETE</th><th>SEGURO</th><th>TOTAL</th></tr></thead><tbody id="reportTable"></tbody></table></div></article>
+        <p class="data-note">Os dados são armazenados localmente no navegador (LocalStorage). Não há banco de dados ou sincronização entre dispositivos nesta versão estática.</p>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="orderDialog" class="modal">
+    <form id="orderForm" class="modal-form">
+      <div class="modal-heading"><div><span class="eyebrow">NOVA OPERAÇÃO</span><h2>Criar pedido de frete</h2></div><button type="button" class="icon-button" id="closeDialog" aria-label="Fechar">×</button></div>
+      <div class="form-grid">
+        <label>Cliente<select id="clientSelect" required></select></label>
+        <label>Nome do destinatário<input id="recipient" required placeholder="Nome / empresa e cidade"></label>
+        <label>Distância (km)<input id="distance" type="number" min="1" step="0.1" required placeholder="Ex.: 80"></label>
+        <div class="form-divider">Volumes transportados</div>
+        <div id="volumeRows" class="volume-rows"></div>
+        <button type="button" class="button button-light add-volume" id="addVolume">＋ Adicionar volume</button>
+        <label class="full-field">Veículo compatível<select id="vehicleSelect" required><option value="">Preencha os dados do pedido primeiro</option></select></label>
+      </div>
+      <div class="modal-footer"><button type="button" class="button button-light" id="cancelDialog">Cancelar</button><button type="submit" class="button button-primary">Criar pedido</button></div>
+      <p class="form-hint" id="formHint">O sistema calcula o frete, os adicionais, o desconto e o seguro automaticamente.</p>
+    </form>
+  </dialog>
+  <dialog id="detailsDialog" class="modal"><div class="modal-form"><div class="modal-heading"><div><span class="eyebrow">DETALHES DO PEDIDO</span><h2 id="detailTitle">Pedido</h2></div><button class="icon-button" id="closeDetails" aria-label="Fechar">×</button></div><div id="detailContent"></div><div class="modal-footer"><button class="button button-light" id="detailClose">Fechar</button></div></div></dialog>
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>
